@@ -24,7 +24,8 @@
     "import-spacing": true,
     "indent": [
       true,
-      "spaces"
+		"tabs",
+		3
     ],
     "interface-over-type-literal": true,
     "label-position": true,
@@ -83,7 +84,6 @@
       "check-else",
       "check-whitespace"
     ],
-    "prefer-const": true,
     "quotemark": [
       true,
       "single"
