@@ -10,12 +10,7 @@ export class SearchComponent implements OnInit {
 	person: Person;
 	constructor(private personStorageService: PersonStorageService) {
 		this.person = this.personStorageService.get(293423171);
-		this.person.loadFriends();
 	}
 
-	ngOnInit() {
-
-	}
-}
-function createPerson(id){ return new Person(id) };
+	ngOnInit() {}
 }
