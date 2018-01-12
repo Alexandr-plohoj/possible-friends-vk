@@ -1,37 +1,40 @@
 import { Jsonp } from '@angular/http';
 import { Injectable } from '@angular/core';
 import { error } from 'util';
-
-export class Person {
-	friends = new Array<number>();
-	script: HTMLElement = null;
-	constructor( public id: number) {}
-	addFriend(friendIDs: number[]) {
-		this.friends = friendIDs;
-		console.log(this);
-	}
-	get infoURL(){
-		return `https://api.vk.com/method/friends.get?user_id=${this.id}&callback=JSONP_CALLBACK`
-	}
-}
+import { Person, PersonCount, PersonCountList } from './person';
 
 @Injectable()
-export class PersonStorageService {
-	storage = new Map<number, Person>();
-	constructor(private jsonp: Jsonp) {}
+export class PersonStorageService{
+	constructor(private jsonp: Jsonp) {
+	}
 	get(id: number) {
-		if (this.storage.has(id)) {
-			return this.storage.get(id);
-		} else {
-			let person = new Person(id);
-			this.jsonp.get(person.infoURL).toPromise().then((response) => {
+		let person = new Person(id);
+		this.jsonp.get(person.infoURL).toPromise().then((response) => {
+			if (response.json().error) {
+				return;
+			}
+			let personList = new Array<Person>();
+			for (let friendID of response.json().response as number[]) {
+				personList.push(new Person(friendID));
+			}
+			person.setFriend(personList);
+		});
+		return person;
+	}
+	getPossibleFriends(person: Person) {
+		let personList = new PersonCountList();
+		for (let friend of person.friends) {
+			this.jsonp.get(friend.infoURL).toPromise().then((response) => {
 				if (response.json().error) {
 					return;
 				}
-				person.addFriend(response.json().response as number[]);
+				for (let possibleFriendID of response.json().response as number[]) {
+					if (!person.friends.some( personFrineds => personFrineds.id == possibleFriendID)) {
+						personList.get(possibleFriendID).count++;
+					}
+				}
 			});
-			this.storage.set(id, person);
-			return person;
 		}
+		return personList;
 	}
 }
