@@ -20,17 +20,8 @@ export class PersonCount extends Person {
 	}
 }
 
-class Loaded {
-	succesfull = 0;
-	failed = 0;
-	get total() {
-		return this.succesfull + this.failed;
-	}
-}
-
 export class PersonCountList {
 	public list = new Array<PersonCount>();
-	public friendInfoLoaded = new Loaded;
 	get(id: number) {
 		let person = this.list.find(value => value.id == id);
 		if (person) {
