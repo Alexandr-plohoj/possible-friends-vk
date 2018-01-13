@@ -11,8 +11,14 @@ export class SearchComponent implements OnInit {
 	person: Person = null;
 	possibleFrinedList = new PersonCountList();
 	constructor(private personStorageService: PersonStorageService) {
-		this.person = this.personStorageService.get(293423171);
-		setTimeout(() => { this.possibleFrinedList = this.personStorageService.getPossibleFriends(this.person); }, 1000);
+		this.personStorageService.get(293423171)
+		.then((person) => {
+			this.person = person;
+			return this.personStorageService.getPossibleFriends(this.person);
+		})
+		.then((possibleFrinedList) => {
+			this.possibleFrinedList = possibleFrinedList;
+		});
 	}
 
 	ngOnInit() {}

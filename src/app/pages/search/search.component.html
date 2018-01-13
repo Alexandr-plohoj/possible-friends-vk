@@ -1,6 +1,6 @@
 <ng-container *ngIf="person">
-	<p>Possible friends length: {{possibleFrinedList.getList(false).length}}</p>
-	<p *ngFor="let friend of possibleFrinedList.getList(false)">
+	<p>Possible friends length: {{possibleFrinedList.list.length}}</p>
+	<p *ngFor="let friend of possibleFrinedList.list">
 		Person id: {{friend.id}}; Сommon friends: {{friend.count}}
 	</p>
 </ng-container>

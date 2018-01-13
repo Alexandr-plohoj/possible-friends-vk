@@ -20,9 +20,17 @@ export class PersonCount extends Person {
 	}
 }
 
+class Loaded {
+	succesfull = 0;
+	failed = 0;
+	get total() {
+		return this.succesfull + this.failed;
+	}
+}
 
 export class PersonCountList {
-	private list = new Array<PersonCount>();
+	public list = new Array<PersonCount>();
+	public friendInfoLoaded = new Loaded;
 	get(id: number) {
 		let person = this.list.find(value => value.id == id);
 		if (person) {
@@ -32,18 +40,15 @@ export class PersonCountList {
 		this.list.push(person);
 		return person;
 	}
-	getList(sorted = true) {
-		if (sorted) {
-			return this.list.sort((a, b) => {
-				if ( a.count < b.count) {
-					return 1;
-				}
-				if ( a.count > b.count) {
-					return -1;
-				}
-				return 0;
-			});
-		}
-		return this.list;
+	sort() {
+		this.list = this.list.sort((a, b) => {
+			if ( a.count < b.count) {
+				return 1;
+			}
+			if ( a.count > b.count) {
+				return -1;
+			}
+			return 0;
+		});
 	}
 }
