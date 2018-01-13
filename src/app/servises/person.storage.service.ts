@@ -54,12 +54,13 @@ export class PersonStorageService {
 					loadingStage.failed++;
 					return;
 				}
-				for (let possibleFriendID of response.json().response as number[]) {
+				// for (let possibleFriendID of response.json().response as number[]) {
+					let possibleFriendID = response.json().response[0] as number;
 					if (person.id != possibleFriendID
 							&& !person.friends.some( personFrineds => personFrineds.id == possibleFriendID)) {
 						possibleFriendList.get(possibleFriendID).count++;
 					}
-				}
+				// }
 				loadingStage.succesfull++;
 				loadingStage.resultCount = possibleFriendList.list.length;
 				subject.next(loadingStage);
@@ -85,7 +86,7 @@ export class PersonStorageService {
 			this.jsonp.get(
 				'https://api.vk.com/method/users.get?user_ids='
 					+ personList.map( person => person.id).join(',')
-					+ '&fields=first_name,last_name,sex,bdate,photo_50,photo_200&callback=JSONP_CALLBACK'
+					+ '&fields=first_name,last_name,sex,bdate,photo_100,photo_200&callback=JSONP_CALLBACK'
 				).toPromise().then((response) => {
 					if (response.json().error) {
 						reject(response.json().error);

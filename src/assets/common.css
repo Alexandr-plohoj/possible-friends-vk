@@ -1,0 +1,19 @@
+.flex{
+	display: flex;
+}
+.between-x{
+	display: flex;
+	justify-content: space-around
+}
+.center-x{
+	display: flex;
+	justify-content: center;
+}
+.wrap{
+	display: flex;
+	flex-wrap: wrap;
+}
+.wrap-reverse{
+	display: flex;
+	flex-wrap: wrap-reverse;
+}

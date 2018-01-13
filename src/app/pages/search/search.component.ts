@@ -9,12 +9,22 @@ import { Person, PersonCount, PersonCountList, PersonFilter } from '../../servis
 })
 export class SearchComponent implements OnInit {
 	person: Person = null;
-	possibleFrinedList = new PersonCountList();
-	loadingStage = new LoadingStage();
+	possibleFrinedList: PersonCountList;
+	loadingStage: LoadingStage;
 	filter = new PersonFilter();
-	constructor(private personStorageService: PersonStorageService) {
+	fromModel = {
+		userID: undefined as number,
+	};
+	constructor(
+		private personStorageService: PersonStorageService,
+	) {}
+	get possibleFrinedFiltredList() {return this.possibleFrinedList.getAll(this.filter); }
+	loadPosibleFriend() {
+		delete this.possibleFrinedList;
+		delete this.loadingStage;
+		this.filter = new PersonFilter();
 		this.filter.length = 10;
-		this.personStorageService.get(209991765)
+		this.personStorageService.get(this.fromModel.userID)
 		.then((person) => {
 			this.person = person;
 			this.personStorageService.loadInfo([this.person]);
@@ -30,6 +40,11 @@ export class SearchComponent implements OnInit {
 			});
 		});
 	}
-	get possibleFrinedFiltredList() {return this.possibleFrinedList.getAll(this.filter); }
+	changeUser() {
+		this.personStorageService.loadInfo([new Person(this.fromModel.userID)])
+		.then((person) => {
+			this.person = person[0];
+		});
+	}
 	ngOnInit() {}
 }

@@ -11,7 +11,7 @@ export interface UserInfo {
 	uid: number;
 	first_name: string;
 	last_name: string;
-	photo_50: string;
+	photo_100: string;
 	photo_200: string;
 	sex: number;
 	bdate: string;
@@ -20,7 +20,7 @@ export class PersonInfo {
 	id: number = null;
 	firstName: string = null;
 	lastName: string = null;
-	photo: {50: string, 200: string} = null;
+	photo: {100: string, 200: string} = null;
 	sex: Sex;
 	bdate: Date = null;
 	get fullName(){ return `${this.firstName} ${this.lastName}`; }
@@ -28,8 +28,8 @@ export class PersonInfo {
 		if (info.first_name) { this.firstName = info.first_name; }
 		if (info.last_name) { this.lastName = info.last_name; }
 		if (info.sex) { this.sex = info.sex; }
-		if (info.photo_50 && info.photo_200) {
-			this.photo = {50: info.photo_50, 200: info.photo_200};
+		if (info.photo_100 && info.photo_200) {
+			this.photo = {100: info.photo_100, 200: info.photo_200};
 		}
 	}
 }
