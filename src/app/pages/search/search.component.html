@@ -4,9 +4,10 @@
 	</ng-container>
 	<ng-container *ngIf="possibleFrinedList">
 		<p *ngIf="!loadingStage">Possible friends length: {{possibleFrinedList.list.length}}</p>
-		<p *ngFor="let friend of possibleFrinedList.list">
-			Person id: {{friend.id}}; Сommon friends: {{friend.count}}
-		</p>
+		<div *ngFor="let person of possibleFrinedFiltredList">
+			<img *ngIf="person.photo" [src]="person.photo['50']">
+			<span>Person id: {{person.id}}; Сommon friends: {{person.count}}</span>
+		</div>
 	</ng-container>
 
 </ng-container>

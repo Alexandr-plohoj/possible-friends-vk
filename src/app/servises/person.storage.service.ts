@@ -1,7 +1,7 @@
 import { Jsonp } from '@angular/http';
 import { Injectable } from '@angular/core';
 import { error } from 'util';
-import { Person, PersonCount, PersonCountList } from './person';
+import { Person, PersonCount, PersonCountList, UserInfo } from './person';
 import { Subject } from 'rxjs/Subject';
 
 export class LoadingStage {
@@ -29,9 +29,10 @@ export class PersonStorageService {
 	get(id: number) {
 		return new Promise<Person>((resolver, reject) => {
 			let person = new Person(id);
-			this.jsonp.get(person.infoURL).toPromise().then((response) => {
+			this.jsonp.get(person.frinedApiURL).toPromise().then((response: any) => {
 				if (response.json().error) {
 					reject(response.json().error);
+					return;
 				}
 				let possibleFriendList = new Array<Person>();
 				for (let friendID of response.json().response as number[]) {
@@ -39,7 +40,7 @@ export class PersonStorageService {
 				}
 				person.setFriend(possibleFriendList);
 				resolver(person);
-			});
+			}).catch((result) => reject(result));
 		});
 	}
 	getPossibleFriends(person: Person) {
@@ -47,7 +48,7 @@ export class PersonStorageService {
 		let possibleFriendList = new PersonCountList();
 		let loadingStage = new LoadingStage(person.friends.length);
 		for (let friend of person.friends) {
-			this.jsonp.get(friend.infoURL).toPromise()
+			this.jsonp.get(friend.frinedApiURL).toPromise()
 			.then((response) => {
 				if (response.json().error) {
 					loadingStage.failed++;
@@ -78,5 +79,28 @@ export class PersonStorageService {
 			});
 		}
 		return subject;
+	}
+	loadInfo(personList: Person[]) {
+		return new Promise<Array<Person>>((resolver, reject) => {
+			this.jsonp.get(
+				'https://api.vk.com/method/users.get?user_ids='
+					+ personList.map( person => person.id).join(',')
+					+ '&fields=first_name,last_name,sex,bdate,photo_50,photo_200&callback=JSONP_CALLBACK'
+				).toPromise().then((response) => {
+					if (response.json().error) {
+						reject(response.json().error);
+						return;
+					}
+					for (let info of response.json().response as Array<UserInfo>) {
+						let person = personList.find(velue => velue.id == info.uid);
+						if (!person) {
+							reject('User not query');
+							continue;
+						}
+						person.copy(info);
+					}
+					resolver(personList);
+				}).catch((result) => reject(result));
+		});
 	}
 }
