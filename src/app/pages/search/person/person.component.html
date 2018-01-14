@@ -3,10 +3,10 @@
 </div>
 <div class="info">
 	<h5><a *ngIf="person.firstName" [href]="'https://vk.com/id'+ person.id">{{person.fullName}}</a></h5>
-	<span *ngIf="person.count">Friend count: {{person.count}}</span>
-	<ng-container *ngIf="person.bdate && person.bdate.day && person.bdate.month">
-		<p >Birthday: {{person.bdate.day}}.{{person.bdate.month}}<span *ngIf="person.bdate.year">.{{person.bdate.year}}</span>
-		</p>
-	</ng-container>
+	<p *ngIf="person.count">Friend count: {{person.count}}</p>
+	<p *ngIf="person.bdate && person.bdate.day && person.bdate.month" >
+		Birthday: {{person.bdate.day}}.{{person.bdate.month}}<span *ngIf="person.bdate.year">.{{person.bdate.year}}</span>
+	</p>
+	<p *ngIf="person.relation">Relation: {{person.relation}}</p>
 </div>
 

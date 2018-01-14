@@ -1,20 +1,21 @@
-enum Sex { NONE = 0, WOMAN = 1, MAN = 2 }
-
+enum Sex { ANY, WOMAN, MAN }
+enum Relation { NOT_SPECIFIED, SINGLE, IN_RELATIONSHIP, ENGAGED,
+	MARRIED, COMPLICATED, SEARCHING, LOVE, CIVIL_UNION }
 export class PersonFilter {
 	start: number;
 	length: number;
-	sex: Sex;
-	age = {start: null as number, end: null as number};
-	showWithoutAge = false;
+	sex = Sex.ANY;
+	age = {start: null as number, end: null as number, showWithout: false};
+	relation = {value: Relation.NOT_SPECIFIED, showWithout: false};
 	clone() {
 		let filter = new PersonFilter();
 		filter.start = this.start;
 		filter.length = this.length;
 		filter.sex = this.sex;
 		if (filter.age) {
-			filter.age = {start: this.age.start, end: this.age.end};
+			filter.age = {start: this.age.start, end: this.age.end, showWithout: this.age.showWithout};
 		}
-		filter.showWithoutAge = this.showWithoutAge;
+		filter.relation = {value: this.relation.value, showWithout: this.relation.showWithout};
 		return filter;
 	}
 }
@@ -27,6 +28,7 @@ export interface UserInfo {
 	photo_200: string;
 	sex: number;
 	bdate: string;
+	relation: Relation;
 }
 
 export class Person {
@@ -35,11 +37,12 @@ export class Person {
 	photo: {100: string, 200: string} = null;
 	sex: Sex = null;
 	bdate: {day: number, month: number, year?: number} = null;
+	relation: Relation;
 	constructor(
 		public id: number,
 	) {}
 	static get field() {
-		return '&fields=first_name,last_name,sex,bdate,photo_100,photo_200';
+		return '&fields=first_name,last_name,sex,bdate,photo_100,photo_200,relation';
 	}
 	static friendApiURL(id: number) {
 		return `https://api.vk.com/method/friends.get?user_id=${id}${Person.field}&callback=JSONP_CALLBACK`;
@@ -52,9 +55,9 @@ export class Person {
 	}
 	get fullName(){ return `${this.firstName} ${this.lastName}`; }
 	copy(info: UserInfo) {
-		if (info.first_name) { this.firstName = info.first_name; }
-		if (info.last_name) { this.lastName = info.last_name; }
-		if (info.sex) { this.sex = info.sex; }
+		this.firstName = info.first_name;
+		this.lastName = info.last_name;
+		this.sex = info.sex;
 		if (info.photo_100 && info.photo_200) {
 			this.photo = {100: info.photo_100, 200: info.photo_200};
 		}
@@ -72,6 +75,7 @@ export class Person {
 				console.log('strange date', info.bdate);
 			}
 		}
+		this.relation = info.relation;
 	}
 }
 
@@ -125,8 +129,15 @@ export class PersonCountList {
 								return false;
 							}
 						}
-					} else if (!filter.showWithoutAge) {
+					} else if (!filter.age.showWithout) {
 						return false;
+					}
+				}
+				if (filter.relation.value) {
+					if (filter.relation.value != person.relation) {
+						if (!(person.relation == Relation.NOT_SPECIFIED && filter.relation.showWithout)) {
+							return false;
+						}
 					}
 				}
 				return true;

@@ -12,9 +12,7 @@ export class SearchComponent implements OnInit {
 	possibleFrinedList: PersonCountList;
 	loadingStage: LoadingStage;
 	filter = new PersonFilter();
-	fromModel = {
-		userID: undefined as number,
-	};
+	userID: number;
 	constructor(
 		private personStorageService: PersonStorageService,
 	) {}
@@ -29,9 +27,10 @@ export class SearchComponent implements OnInit {
 		delete this.possibleFrinedList;
 		delete this.loadingStage;
 		this.filter.length = 10;
-		(this.person && this.person.id == this.fromModel.userID ?
+		if (!this.userID) {return; }
+		(this.person && this.person.id == this.userID ?
 			Promise.resolve(this.person) :
-			this.personStorageService.get(this.fromModel.userID)
+			this.personStorageService.get(this.userID)
 				.then((person) => {
 					this.person = person;
 					return person;
@@ -49,13 +48,13 @@ export class SearchComponent implements OnInit {
 		});
 	}
 	changeUser() {
-		this.personStorageService.get(this.fromModel.userID)
+		this.personStorageService.get(this.userID)
 		.then((person) => {
 			this.person = person;
 		});
 	}
 	changeFilter() {
-		console.log(this.fromModel, this.filter);
+		console.log(this.filter);
 	}
 	showMore() {
 		this.filter.length += 10;

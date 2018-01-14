@@ -1,13 +1,13 @@
 <form id="navigation" (ngSubmit)="loadPosibleFriend()">
 	<h2>Filters</h2>
 	<label>User ID
-		<input type="text" placeholder="User ID" [(ngModel)]="fromModel.userID" name="userID" (ngModelChange)="changeUser()">
+		<input type="text" placeholder="User ID" [(ngModel)]="userID" name="userID" (ngModelChange)="changeUser()">
 	</label>
 	<label>Sex
 		<select [(ngModel)]="filter.sex" name="sex" (ngModelChange)="changeFilter()">
 			<option [ngValue]="0">Any</option>
-			<option [ngValue]="2">Man</option>
 			<option [ngValue]="1">Woman</option>
+			<option [ngValue]="2">Man</option>
 		</select>
 	</label>
 	<label >Age begin
@@ -17,8 +17,25 @@
 		<input type="text" placeholder="Age end" [(ngModel)]="filter.age.end" name="ageEnd" (ngModelChange)="changeUser()">
 	</label>
 	<label>
-		<input type="checkbox" [(ngModel)]="filter.showWithoutAge" name="showWithoutAge" (ngModelChange)="changeUser()">
+		<input type="checkbox" [(ngModel)]="filter.age.showWithout" name="showWithoutAge" (ngModelChange)="changeUser()">
 		Show without age
+	</label>
+	<label>Relation
+		<select [(ngModel)]="filter.relation.value" name="relation" (ngModelChange)="changeFilter()">
+			<option [ngValue]="0">Not specified</option>
+			<option [ngValue]="1">Single</option>
+			<option [ngValue]="2">In a relationship</option>
+			<option [ngValue]="3">Engaged</option>
+			<option [ngValue]="4">Married</option>
+			<option [ngValue]="5">It's complicated</option>
+			<option [ngValue]="6">Actively searching</option>
+			<option [ngValue]="7">In love</option>
+			<option [ngValue]="8">In a civil union</option>
+		</select>
+	</label>
+	<label>
+		<input type="checkbox" [(ngModel)]="filter.relation.showWithout" name="showWithoutRelation" (ngModelChange)="changeUser()">
+		Show without relation
 	</label>
 	<button type="submit">Search</button>
 </form>
