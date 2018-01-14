@@ -2,7 +2,7 @@
 	<img *ngIf="person.photo" [src]="person.photo['100']">
 </div>
 <div class="info">
-	<h5><a [href]="'https://vk.com/id'+ person.id">{{person.fullName}}</a></h5>
-	<span>Friend count: {{person.count}}</span>
+	<h5><a *ngIf="person.firstName" [href]="'https://vk.com/id'+ person.id">{{person.fullName}}</a></h5>
+	<span *ngIf="person.count">Friend count: {{person.count}}</span>
 </div>
 

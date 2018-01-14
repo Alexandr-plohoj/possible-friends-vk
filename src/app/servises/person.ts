@@ -1,10 +1,20 @@
-enum Sex { MAN, WOMAN, MIDDLE, NONE }
+enum Sex { NONE = 0, WOMAN = 1, MAN = 2 }
 
 export class PersonFilter {
 	start: number;
 	length: number;
 	sex: Sex;
 	age: {start: number, end: number};
+	clone() {
+		let filter = new PersonFilter();
+		filter.start = this.start;
+		filter.length = this.length;
+		filter.sex = this.sex;
+		if (filter.age) {
+			filter.age = {start: this.age.start, end: this.age.end};
+		}
+		return filter;
+	}
 }
 
 export interface UserInfo {
@@ -35,17 +45,22 @@ export class PersonInfo {
 }
 
 export class Person extends PersonInfo {
-	friends: Person[] = [];
 	constructor(
 		public id: number,
 	) {
 		super();
 	}
-	setFriend(friends: Person[]) {
-		this.friends = friends;
+	static get field() {
+		return '&fields=first_name,last_name,sex,bdate,photo_100,photo_200';
 	}
-	get frinedApiURL(){
+	static friendApiURL(id: number) {
+		return `https://api.vk.com/method/friends.get?user_id=${id}${Person.field}&callback=JSONP_CALLBACK`;
+	}
+	get friendIDsApiURL() {
 		return `https://api.vk.com/method/friends.get?user_id=${this.id}&callback=JSONP_CALLBACK`;
+	}
+	get infoApiURL() {
+		return `https://api.vk.com/method/users.get?user_id=${this.id}${Person.field}&callback=JSONP_CALLBACK`;
 	}
 }
 
@@ -80,16 +95,15 @@ export class PersonCountList {
 			return 0;
 		});
 	}
-	getAll(filter: PersonFilter = null) {
+	getAll(filter: PersonFilter = null, trim = true) {
 		if (filter) {
 			let filtredList = this.list.filter( person => {
 				if (filter.sex && filter.sex != person.sex) {
-					console.log('filtred sex!!');
 					return false;
 				}
 				return true;
 			});
-			if (filter.start || filter.length) {
+			if (trim && (filter.start || filter.length)) {
 				filtredList = filtredList.slice(
 					filter.start ? filter.start : 0,
 					filter.length ? filter.length : this.list.length);

@@ -29,16 +29,12 @@ export class PersonStorageService {
 	get(id: number) {
 		return new Promise<Person>((resolver, reject) => {
 			let person = new Person(id);
-			this.jsonp.get(person.frinedApiURL).toPromise().then((response: any) => {
+			this.jsonp.get(person.infoApiURL).toPromise().then((response: any) => {
 				if (response.json().error) {
 					reject(response.json().error);
 					return;
 				}
-				let possibleFriendList = new Array<Person>();
-				for (let friendID of response.json().response as number[]) {
-					possibleFriendList.push(new Person(friendID));
-				}
-				person.setFriend(possibleFriendList);
+				person.copy(response.json().response[0]);
 				resolver(person);
 			}).catch((result) => reject(result));
 		});
@@ -46,62 +42,50 @@ export class PersonStorageService {
 	getPossibleFriends(person: Person) {
 		let subject = new Subject<LoadingStage| PersonCountList>();
 		let possibleFriendList = new PersonCountList();
-		let loadingStage = new LoadingStage(person.friends.length);
-		for (let friend of person.friends) {
-			this.jsonp.get(friend.frinedApiURL).toPromise()
-			.then((response) => {
-				if (response.json().error) {
-					loadingStage.failed++;
-					return;
-				}
-				// for (let possibleFriendID of response.json().response as number[]) {
-					let possibleFriendID = response.json().response[0] as number;
-					if (person.id != possibleFriendID
-							&& !person.friends.some( personFrineds => personFrineds.id == possibleFriendID)) {
-						possibleFriendList.get(possibleFriendID).count++;
-					}
-				// }
-				loadingStage.succesfull++;
-				loadingStage.resultCount = possibleFriendList.list.length;
-				subject.next(loadingStage);
-				if (loadingStage.total >= person.friends.length) {
-					possibleFriendList.sort();
-					subject.next(possibleFriendList);
-					subject.complete();
-				}
-			}).catch(() => {
-				loadingStage.failed++;
-				subject.next(loadingStage);
-				if (loadingStage.total >= person.friends.length) {
-					possibleFriendList.sort();
-					subject.next(possibleFriendList);
-					subject.complete();
-				}
-			});
-		}
-		return subject;
-	}
-	loadInfo(personList: Person[]) {
-		return new Promise<Array<Person>>((resolver, reject) => {
-			this.jsonp.get(
-				'https://api.vk.com/method/users.get?user_ids='
-					+ personList.map( person => person.id).join(',')
-					+ '&fields=first_name,last_name,sex,bdate,photo_100,photo_200&callback=JSONP_CALLBACK'
-				).toPromise().then((response) => {
+		this.jsonp.get(person.friendIDsApiURL).toPromise().then(response => {
+			if (response.json().error) {
+				subject.error(response.json().error);
+				return;
+			}
+			return response.json().response as number[];
+		})
+		.then( friendIDs => {
+			let loadingStage = new LoadingStage(friendIDs.length);
+			for (let friendID of friendIDs) {
+				this.jsonp.get(Person.friendApiURL(friendID)).toPromise()
+				.then((response) => {
 					if (response.json().error) {
-						reject(response.json().error);
+						loadingStage.failed++;
 						return;
 					}
-					for (let info of response.json().response as Array<UserInfo>) {
-						let person = personList.find(velue => velue.id == info.uid);
-						if (!person) {
-							reject('User not query');
-							continue;
+					for (let possibleFriendInfo of response.json().response as UserInfo[]) {
+						// let possibleFriendID = response.json().response[0] as number;
+						if (person.id != possibleFriendInfo.uid
+								&& !friendIDs.some( personFrineds => personFrineds == possibleFriendInfo.uid)) {
+							let possibleFriend = possibleFriendList.get(possibleFriendInfo.uid);
+							possibleFriend.count++;
+							possibleFriend.copy(possibleFriendInfo);
 						}
-						person.copy(info);
 					}
-					resolver(personList);
-				}).catch((result) => reject(result));
+					loadingStage.succesfull++;
+					loadingStage.resultCount = possibleFriendList.list.length;
+					subject.next(loadingStage);
+					if (loadingStage.total >= friendIDs.length) {
+						possibleFriendList.sort();
+						subject.next(possibleFriendList);
+						subject.complete();
+					}
+				}).catch(() => {
+					loadingStage.failed++;
+					subject.next(loadingStage);
+					if (loadingStage.total >= friendIDs.length) {
+						possibleFriendList.sort();
+						subject.next(possibleFriendList);
+						subject.complete();
+					}
+				});
+			}
 		});
+		return subject;
 	}
 }

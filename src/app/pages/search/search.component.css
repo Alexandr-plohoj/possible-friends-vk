@@ -1,9 +1,13 @@
+label{
+	display: block;
+	padding: 5px;
+}
 #navigation-stub{
 	width: 300px;
 	min-width: 300px;
 }
 #navigation{
-	position: absolute;
+	position: fixed;
 	right: 0;
 	width: 300px;
 	min-width: 300px;
@@ -13,6 +17,15 @@
 	padding: 30px;
 	margin: 10px;
 	box-sizing: border-box;
+}
+#show-more{
+	width: 100%;
+	background-color: #edeef0;
+	border-radius: 10px;
+	cursor: pointer;
+	padding: 10px;
+	text-align: center;
+	margin: 5px;
 }
 @media (max-width: 800px) {
 	#navigation-stub{

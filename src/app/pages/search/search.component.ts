@@ -18,21 +18,29 @@ export class SearchComponent implements OnInit {
 	constructor(
 		private personStorageService: PersonStorageService,
 	) {}
-	get possibleFrinedFiltredList() {return this.possibleFrinedList.getAll(this.filter); }
+	ngOnInit() {}
+	get possibleFrinedFiltredList() {
+		return this.possibleFrinedList.getAll(this.filter);
+	}
+	get posibleFriendsFilterLengthWithoutTrim() {
+		return this.possibleFrinedList.getAll(this.filter, false).length;
+	}
 	loadPosibleFriend() {
 		delete this.possibleFrinedList;
 		delete this.loadingStage;
-		this.filter = new PersonFilter();
 		this.filter.length = 10;
-		this.personStorageService.get(this.fromModel.userID)
-		.then((person) => {
-			this.person = person;
-			this.personStorageService.loadInfo([this.person]);
+		(this.person && this.person.id == this.fromModel.userID ?
+			Promise.resolve(this.person) :
+			this.personStorageService.get(this.fromModel.userID)
+				.then((person) => {
+					this.person = person;
+					return person;
+			})
+		).then( person => {
 			this.personStorageService.getPossibleFriends(this.person)
 			.subscribe((value) => {
 				if (value instanceof PersonCountList) {
 					this.possibleFrinedList = value;
-					this.personStorageService.loadInfo(this.possibleFrinedList.getAll(this.filter));
 					delete this.loadingStage;
 				} else if (value instanceof LoadingStage) {
 					this.loadingStage = value;
@@ -41,10 +49,16 @@ export class SearchComponent implements OnInit {
 		});
 	}
 	changeUser() {
-		this.personStorageService.loadInfo([new Person(this.fromModel.userID)])
+		this.personStorageService.get(this.fromModel.userID)
 		.then((person) => {
-			this.person = person[0];
+			this.person = person;
 		});
 	}
-	ngOnInit() {}
+	changeFilter() {
+		console.log(this.fromModel, this.filter);
+	}
+	showMore() {
+		this.filter.length += 10;
+	}
+
 }
