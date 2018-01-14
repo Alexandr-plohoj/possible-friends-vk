@@ -48,10 +48,12 @@ export class SearchComponent implements OnInit {
 		});
 	}
 	changeUser() {
-		this.personStorageService.get(this.userID)
-		.then((person) => {
-			this.person = person;
-		});
+		if (this.userID) {
+			this.personStorageService.get(this.userID)
+			.then((person) => {
+				this.person = person;
+			});
+		}
 	}
 	changeFilter() {
 		console.log(this.filter);
@@ -59,5 +61,4 @@ export class SearchComponent implements OnInit {
 	showMore() {
 		this.filter.length += 10;
 	}
-
 }

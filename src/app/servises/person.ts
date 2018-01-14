@@ -121,9 +121,6 @@ export class PersonCountList {
 	getAll(filter: PersonFilter = null, trim = true) {
 		if (filter) {
 			let filtredList = this.list.filter( person => {
-				if (!person.photo) {
-					console.log(person);
-				}
 				if (filter.sex && filter.sex != person.sex) {
 					return false;
 				}

@@ -3,7 +3,7 @@
 }
 .between-x{
 	display: flex;
-	justify-content: space-around
+	justify-content: space-between;
 }
 .center-x{
 	display: flex;
