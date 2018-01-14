@@ -1,14 +1,24 @@
 <form id="navigation" (ngSubmit)="loadPosibleFriend()">
 	<h2>Filters</h2>
-	<label >User ID
+	<label>User ID
 		<input type="text" placeholder="User ID" [(ngModel)]="fromModel.userID" name="userID" (ngModelChange)="changeUser()">
 	</label>
-	<label >Sex
+	<label>Sex
 		<select [(ngModel)]="filter.sex" name="sex" (ngModelChange)="changeFilter()">
 			<option [ngValue]="0">Any</option>
 			<option [ngValue]="2">Man</option>
 			<option [ngValue]="1">Woman</option>
 		</select>
+	</label>
+	<label >Age begin
+		<input type="text" placeholder="Age begin" [(ngModel)]="filter.age.start" name="ageBegin" (ngModelChange)="changeUser()">
+	</label>
+	<label>Age end
+		<input type="text" placeholder="Age end" [(ngModel)]="filter.age.end" name="ageEnd" (ngModelChange)="changeUser()">
+	</label>
+	<label>
+		<input type="checkbox" [(ngModel)]="filter.showWithoutAge" name="showWithoutAge" (ngModelChange)="changeUser()">
+		Show without age
 	</label>
 	<button type="submit">Search</button>
 </form>
@@ -24,7 +34,7 @@
 				<div class="center-x wrap">
 					<app-person [person]="person" *ngFor="let person of possibleFrinedFiltredList"></app-person>
 				</div>
-				<div id="show-more" *ngIf="posibleFriendsFilterLengthWithoutTrim > filter.length" (click)="showMore()">Load more</div>
+				<div id="show-more" *ngIf="posibleFriendsFilterLengthWithoutTrim > filter.length" (click)="showMore()">Show more</div>
 			</ng-container>
 		</div>
 		<div id="navigation-stub"></div>
