@@ -47,7 +47,7 @@ export class PersonStorageService {
 				subject.error(response.json().error);
 				return;
 			}
-			return response.json().response as number[];
+			return response.json().response.items as number[];
 		})
 		.then( friendIDs => {
 			let loadingStage = new LoadingStage(friendIDs.length);
@@ -58,11 +58,11 @@ export class PersonStorageService {
 						loadingStage.failed++;
 						return;
 					}
-					for (let possibleFriendInfo of response.json().response as UserInfo[]) {
+					for (let possibleFriendInfo of response.json().response.items as UserInfo[]) {
 						// let possibleFriendID = response.json().response[0] as number;
-						if (person.id != possibleFriendInfo.uid
-								&& !friendIDs.some( personFrineds => personFrineds == possibleFriendInfo.uid)) {
-							let possibleFriend = possibleFriendList.get(possibleFriendInfo.uid);
+						if (person.id != possibleFriendInfo.id
+								&& !friendIDs.some( personFrineds => personFrineds == possibleFriendInfo.id)) {
+							let possibleFriend = possibleFriendList.get(possibleFriendInfo.id);
 							possibleFriend.count++;
 							possibleFriend.copy(possibleFriendInfo);
 						}

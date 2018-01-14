@@ -1,6 +1,6 @@
 <form id="navigation" (ngSubmit)="loadPosibleFriend()">
 	<label>{{'USER_IDS' | translate}}
-		<input type="text" placeholder="{{'USER_IDS' | translate}}" [(ngModel)]="userID" name="userID" (ngModelChange)="changeUser()">
+		<input type="number" placeholder="{{'USER_IDS' | translate}}" [(ngModel)]="userID" name="userID" (ngModelChange)="changeUser()">
 	</label>
 	<h2>{{'FILTERS' | translate}}</h2>
 	<label>{{'SEX' | translate}}
@@ -11,10 +11,10 @@
 		</select>
 	</label>
 	<label >{{'AGE_BEGIN' | translate}}
-		<input type="text" placeholder="{{'AGE_BEGIN' | translate}}" [(ngModel)]="filter.age.start" name="ageBegin" (ngModelChange)="changeUser()">
+		<input type="number" placeholder="{{'AGE_BEGIN' | translate}}" [(ngModel)]="filter.age.start" name="ageBegin" (ngModelChange)="changeUser()">
 	</label>
 	<label>{{'AGE_END' | translate}}
-		<input type="text" placeholder="{{'AGE_END' | translate}}" [(ngModel)]="filter.age.end" name="ageEnd" (ngModelChange)="changeUser()">
+		<input type="number" placeholder="{{'AGE_END' | translate}}" [(ngModel)]="filter.age.end" name="ageEnd" (ngModelChange)="changeUser()">
 	</label>
 	<label>
 		<input type="checkbox" [(ngModel)]="filter.age.showWithout" name="showWithoutAge" (ngModelChange)="changeUser()">

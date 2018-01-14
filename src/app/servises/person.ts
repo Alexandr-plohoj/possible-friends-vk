@@ -21,11 +21,11 @@ export class PersonFilter {
 }
 
 export interface UserInfo {
-	uid: number;
+	id: number;
 	first_name: string;
 	last_name: string;
 	photo_100: string;
-	photo_200: string;
+	photo_200_orig: string;
 	sex: number;
 	bdate: string;
 	relation: Relation;
@@ -41,25 +41,33 @@ export class Person {
 	constructor(
 		public id: number,
 	) {}
+	get age() {
+		return new Date(
+			Date.now() - new Date(this.bdate.year, this.bdate.month, this.bdate.day).getTime()
+		).getFullYear() - 1970;
+	}
 	static get field() {
-		return '&fields=first_name,last_name,sex,bdate,photo_100,photo_200,relation';
+		return '&fields=first_name,last_name,sex,bdate,photo_100,photo_200_orig,relation';
 	}
 	static friendApiURL(id: number) {
-		return `https://api.vk.com/method/friends.get?user_id=${id}${Person.field}&callback=JSONP_CALLBACK`;
+		return `https://api.vk.com/method/friends.get?user_id=${id}${Person.field}&v=5.69&callback=JSONP_CALLBACK`;
 	}
 	get friendIDsApiURL() {
-		return `https://api.vk.com/method/friends.get?user_id=${this.id}&callback=JSONP_CALLBACK`;
+		return `https://api.vk.com/method/friends.get?user_id=${this.id}&v=5.69&callback=JSONP_CALLBACK`;
 	}
 	get infoApiURL() {
-		return `https://api.vk.com/method/users.get?user_id=${this.id}${Person.field}&callback=JSONP_CALLBACK`;
+		return `https://api.vk.com/method/users.get?user_id=${this.id}${Person.field}&v=5.69&callback=JSONP_CALLBACK`;
 	}
 	get fullName(){ return `${this.firstName} ${this.lastName}`; }
 	copy(info: UserInfo) {
 		this.firstName = info.first_name;
 		this.lastName = info.last_name;
 		this.sex = info.sex;
-		if (info.photo_100 && info.photo_200) {
-			this.photo = {100: info.photo_100, 200: info.photo_200};
+		if (info.photo_100 || info.photo_200_orig) {
+			this.photo = {
+				100: info.photo_100 ? info.photo_100 : null,
+				200: info.photo_200_orig ? info.photo_200_orig : null,
+			};
 		}
 		if (info.bdate) {
 			let date = info.bdate.split('.');
@@ -113,31 +121,32 @@ export class PersonCountList {
 	getAll(filter: PersonFilter = null, trim = true) {
 		if (filter) {
 			let filtredList = this.list.filter( person => {
+				if (!person.photo) {
+					console.log(person);
+				}
 				if (filter.sex && filter.sex != person.sex) {
 					return false;
 				}
 				if (filter.age.start || filter.age.end) {
 					if (person.bdate && person.bdate.year) {
-						let bdate = new Date(person.bdate.year, person.bdate.month, person.bdate.day).getTime();
-						if (filter.age.start) {
-							if (Date.now() - (filter.age.start * 31536000000) < bdate) {
-								return false;
-							}
+						let age = person.age;
+						if (filter.age.start && filter.age.start > age) {
+							return false;
 						}
-						if (filter.age.end) {
-							if (Date.now() - (filter.age.end * 31536000000) > bdate) {
-								return false;
-							}
+						if (filter.age.end && filter.age.end < age) {
+							return false;
 						}
 					} else if (!filter.age.showWithout) {
 						return false;
 					}
 				}
 				if (filter.relation.value) {
-					if (filter.relation.value != person.relation) {
-						if (!(person.relation == Relation.NOT_SPECIFIED && filter.relation.showWithout)) {
+					if (!person.relation) {
+						if (!filter.relation.showWithout) {
 							return false;
 						}
+					} else if (filter.relation.value != person.relation) {
+						return false;
 					}
 				}
 				return true;
