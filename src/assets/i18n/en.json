@@ -1,0 +1,33 @@
+{
+	"POSIBLE_FRIENDS_VK": "Posible friends VK",
+
+	"USER_IDS": "User IDs",
+	"FILTERS": "Filters",
+	"SEX": "Sex",
+	"ANY": "Any",
+	"WOMAN": "Woman",
+	"MAN": "Man",
+	"AGE_BEGIN": "Age begin",
+	"AGE_END": "Age end",
+	"SHOW_WITHOUT_AGE": "Show without age",
+	"RELATION": "Relation",
+
+	"NOT_SPECIFIED": " Not specified",
+	"SINGLE": "Single",
+	"IN_RELATIONSHIP": "In a relationship",
+	"ENGAGED": "Engaged",
+	"MARRIED": "Married",
+	"COMPLICATED": "It's complicated",
+	"SEARCHING": "Actively searching",
+	"LOVE": "In love",
+	"CIVIL_UNION": "In a civil union",
+
+	"SHOW_WITHOUT_RELATION": "Show without relation",
+	"LOADING": "Loading",
+	"LOADED": "Loaded",
+	"TOTAL": "Total",
+	"FILTER_TARGET_LENGTH": "Possible friends target filter length",
+	"SHOW_MORE": "Show more",
+	"SHARED_FRIENDS": "Shared friends",
+	"BIRTHDAY": "Birthday"
+}

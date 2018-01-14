@@ -1,57 +1,59 @@
 <form id="navigation" (ngSubmit)="loadPosibleFriend()">
-	<h2>Filters</h2>
-	<label>User ID
-		<input type="text" placeholder="User ID" [(ngModel)]="userID" name="userID" (ngModelChange)="changeUser()">
+	<label>{{'USER_IDS' | translate}}
+		<input type="text" placeholder="{{'USER_IDS' | translate}}" [(ngModel)]="userID" name="userID" (ngModelChange)="changeUser()">
 	</label>
-	<label>Sex
+	<h2>{{'FILTERS' | translate}}</h2>
+	<label>{{'SEX' | translate}}
 		<select [(ngModel)]="filter.sex" name="sex" (ngModelChange)="changeFilter()">
-			<option [ngValue]="0">Any</option>
-			<option [ngValue]="1">Woman</option>
-			<option [ngValue]="2">Man</option>
+			<option [ngValue]="0">{{'ANY' | translate}}</option>
+			<option [ngValue]="1">{{'WOMAN' | translate}}</option>
+			<option [ngValue]="2">{{'MAN' | translate}}</option>
 		</select>
 	</label>
-	<label >Age begin
-		<input type="text" placeholder="Age begin" [(ngModel)]="filter.age.start" name="ageBegin" (ngModelChange)="changeUser()">
+	<label >{{'AGE_BEGIN' | translate}}
+		<input type="text" placeholder="{{'AGE_BEGIN' | translate}}" [(ngModel)]="filter.age.start" name="ageBegin" (ngModelChange)="changeUser()">
 	</label>
-	<label>Age end
-		<input type="text" placeholder="Age end" [(ngModel)]="filter.age.end" name="ageEnd" (ngModelChange)="changeUser()">
+	<label>{{'AGE_END' | translate}}
+		<input type="text" placeholder="{{'AGE_END' | translate}}" [(ngModel)]="filter.age.end" name="ageEnd" (ngModelChange)="changeUser()">
 	</label>
 	<label>
 		<input type="checkbox" [(ngModel)]="filter.age.showWithout" name="showWithoutAge" (ngModelChange)="changeUser()">
-		Show without age
+		{{'SHOW_WITHOUT_AGE' | translate}}
 	</label>
-	<label>Relation
+	<label>{{'RELATION' | translate}}
 		<select [(ngModel)]="filter.relation.value" name="relation" (ngModelChange)="changeFilter()">
-			<option [ngValue]="0">Not specified</option>
-			<option [ngValue]="1">Single</option>
-			<option [ngValue]="2">In a relationship</option>
-			<option [ngValue]="3">Engaged</option>
-			<option [ngValue]="4">Married</option>
-			<option [ngValue]="5">It's complicated</option>
-			<option [ngValue]="6">Actively searching</option>
-			<option [ngValue]="7">In love</option>
-			<option [ngValue]="8">In a civil union</option>
+			<option [ngValue]="0">{{'NOT_SPECIFIED' | translate}}</option>
+			<option [ngValue]="1">{{'SINGLE' | translate}}</option>
+			<option [ngValue]="2">{{'IN_RELATIONSHIP' | translate}}</option>
+			<option [ngValue]="3">{{'ENGAGED' | translate}}</option>
+			<option [ngValue]="4">{{'MARRIED' | translate}}</option>
+			<option [ngValue]="5">{{'COMPLICATED' | translate}}</option>
+			<option [ngValue]="6">{{'SEARCHING' | translate}}</option>
+			<option [ngValue]="7">{{'LOVE' | translate}}</option>
+			<option [ngValue]="8">{{'CIVIL_UNION' | translate}}</option>
 		</select>
 	</label>
 	<label>
 		<input type="checkbox" [(ngModel)]="filter.relation.showWithout" name="showWithoutRelation" (ngModelChange)="changeUser()">
-		Show without relation
+		{{'SHOW_WITHOUT_RELATION' | translate}}
 	</label>
-	<button type="submit">Search</button>
+	<button type="submit">{{'LOADING' | translate}}</button>
 </form>
 <app-person *ngIf="person" [person]="person"></app-person>
 <ng-container *ngIf="person">
 	<ng-container *ngIf="loadingStage">
-		<p>Loading: {{loadingStage.persent}}%; total: {{loadingStage.resultCount}}</p>
+		<p>{{'LOADED' | translate}}: {{loadingStage.persent}}%; {{'TOTAL' | translate}}: {{loadingStage.resultCount}}</p>
 	</ng-container>
 	<div class="between-x">
 		<div>
 			<ng-container *ngIf="possibleFrinedList">
-				<p *ngIf="!loadingStage">Possible friends target filter length: {{posibleFriendsFilterLengthWithoutTrim}}</p>
+				<p *ngIf="!loadingStage">{{'FILTER_TARGET_LENGTH' | translate}}: {{posibleFriendsFilterLengthWithoutTrim}}</p>
 				<div class="center-x wrap">
 					<app-person [person]="person" *ngFor="let person of possibleFrinedFiltredList"></app-person>
 				</div>
-				<div id="show-more" *ngIf="posibleFriendsFilterLengthWithoutTrim > filter.length" (click)="showMore()">Show more</div>
+				<div id="show-more" *ngIf="posibleFriendsFilterLengthWithoutTrim > filter.length" (click)="showMore()">
+						{{'SHOW_MORE' | translate}}
+				</div>
 			</ng-container>
 		</div>
 		<div id="navigation-stub"></div>

@@ -3,10 +3,9 @@
 </div>
 <div class="info">
 	<h5><a *ngIf="person.firstName" [href]="'https://vk.com/id'+ person.id">{{person.fullName}}</a></h5>
-	<p *ngIf="person.count">Friend count: {{person.count}}</p>
+	<p *ngIf="person.count">{{'SHARED_FRIENDS' | translate}}: {{person.count}}</p>
 	<p *ngIf="person.bdate && person.bdate.day && person.bdate.month" >
-		Birthday: {{person.bdate.day}}.{{person.bdate.month}}<span *ngIf="person.bdate.year">.{{person.bdate.year}}</span>
+			{{'BIRTHDAY' | translate}}: {{person.bdate.day}}.{{person.bdate.month}}<span *ngIf="person.bdate.year">.{{person.bdate.year}}</span>
 	</p>
-	<p *ngIf="person.relation">Relation: {{person.relation}}</p>
+	<p *ngIf="person.relation">{{person.relation | relation | translate}}</p>
 </div>
-
