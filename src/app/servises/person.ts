@@ -7,6 +7,7 @@ export class PersonFilter {
 	sex = Sex.ANY;
 	age = {start: null as number, end: null as number, showWithout: false};
 	relation = {value: Relation.NOT_SPECIFIED, showWithout: false};
+	city = {value: new Array<string>(), showWithout: false};
 	clone() {
 		let filter = new PersonFilter();
 		filter.start = this.start;
@@ -16,6 +17,7 @@ export class PersonFilter {
 			filter.age = {start: this.age.start, end: this.age.end, showWithout: this.age.showWithout};
 		}
 		filter.relation = {value: this.relation.value, showWithout: this.relation.showWithout};
+		filter.city = {value: this.city.value, showWithout: this.city.showWithout};
 		return filter;
 	}
 }
@@ -29,6 +31,7 @@ export interface UserInfo {
 	sex: number;
 	bdate: string;
 	relation: Relation;
+	city?: {id: number, title: string};
 }
 
 export class Person {
@@ -38,6 +41,7 @@ export class Person {
 	sex: Sex = null;
 	bdate: {day: number, month: number, year?: number} = null;
 	relation: Relation;
+	city: string;
 	constructor(
 		public id: number,
 	) {}
@@ -46,17 +50,18 @@ export class Person {
 			Date.now() - new Date(this.bdate.year, this.bdate.month, this.bdate.day).getTime()
 		).getFullYear() - 1970;
 	}
+	static get version() {return '&v=5.71'; }
 	static get field() {
-		return '&fields=first_name,last_name,sex,bdate,photo_100,photo_200_orig,relation';
+		return '&fields=first_name,last_name,sex,bdate,photo_100,photo_200_orig,relation,city';
 	}
 	static friendApiURL(id: number) {
-		return `https://api.vk.com/method/friends.get?user_id=${id}${Person.field}&v=5.69&callback=JSONP_CALLBACK`;
+		return `https://api.vk.com/method/friends.get?user_id=${id}${Person.field}${Person.version}&callback=JSONP_CALLBACK`;
 	}
 	get friendIDsApiURL() {
-		return `https://api.vk.com/method/friends.get?user_id=${this.id}&v=5.69&callback=JSONP_CALLBACK`;
+		return `https://api.vk.com/method/friends.get?user_id=${this.id}${Person.version}&callback=JSONP_CALLBACK`;
 	}
 	get infoApiURL() {
-		return `https://api.vk.com/method/users.get?user_id=${this.id}${Person.field}&v=5.69&callback=JSONP_CALLBACK`;
+		return `https://api.vk.com/method/users.get?user_id=${this.id}${Person.field}${Person.version}&callback=JSONP_CALLBACK`;
 	}
 	get fullName(){ return `${this.firstName} ${this.lastName}`; }
 	copy(info: UserInfo) {
@@ -84,6 +89,7 @@ export class Person {
 			}
 		}
 		this.relation = info.relation;
+		if (info.city) {this.city = info.city.title; }
 	}
 }
 
@@ -121,28 +127,25 @@ export class PersonCountList {
 	getAll(filter: PersonFilter = null, trim = true) {
 		if (filter) {
 			let filtredList = this.list.filter( person => {
-				if (filter.sex && filter.sex != person.sex) {
-					return false;
-				}
+				if (filter.sex && filter.sex != person.sex) {return false; }
 				if (filter.age.start || filter.age.end) {
 					if (person.bdate && person.bdate.year) {
 						let age = person.age;
-						if (filter.age.start && filter.age.start > age) {
-							return false;
-						}
-						if (filter.age.end && filter.age.end < age) {
-							return false;
-						}
-					} else if (!filter.age.showWithout) {
-						return false;
-					}
+						if (filter.age.start && filter.age.start > age) {return false; }
+						if (filter.age.end && filter.age.end < age) {return false; }
+					} else if (!filter.age.showWithout) {return false; }
 				}
 				if (filter.relation.value) {
-					if (!person.relation) {
-						if (!filter.relation.showWithout) {
+					if (person.relation) {
+						if (filter.relation.value != person.relation) {return false; }
+					} else if (!filter.relation.showWithout) {return false; }
+				}
+				if (filter.city.value.length) {
+					if (person.city) {
+						if (!filter.city.value.some(filterCity => person.city.includes(filterCity))) {
 							return false;
 						}
-					} else if (filter.relation.value != person.relation) {
+					} else if (!filter.city.showWithout) {
 						return false;
 					}
 				}

@@ -1,0 +1,12 @@
+:host{
+	border: 1px solid #999;
+	display: block;
+	border-radius: 10px;
+	padding: 5px;
+}
+input, button{
+	border-radius: 3px;
+}
+.item{
+	padding: 2px 0;
+}

@@ -10,6 +10,7 @@ import { SearchComponent } from './pages/search/search.component';
 import { PersonStorageService } from './servises/person.storage.service';
 import { ConnectionBackend, HttpModule,  Http,  Jsonp,  JsonpModule } from '@angular/http';
 import { PersonComponent } from './pages/search/person/person.component';
+import { SearchListComponent } from './components/search-list/search-list.component';
 
 @NgModule({
 	declarations: [
@@ -17,6 +18,7 @@ import { PersonComponent } from './pages/search/person/person.component';
 		SearchComponent,
 		PersonComponent,
 		RelationPipe,
+		SearchListComponent,
 	],
 	imports: [
 		BrowserModule,

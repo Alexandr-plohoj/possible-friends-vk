@@ -37,6 +37,11 @@
 		<input type="checkbox" [(ngModel)]="filter.relation.showWithout" name="showWithoutRelation" (ngModelChange)="changeUser()">
 		{{'SHOW_WITHOUT_RELATION' | translate}}
 	</label>
+	<app-search-list [title]="'CITY'" [searchList]="filter.city.value"></app-search-list>
+	<label>
+		<input type="checkbox" [(ngModel)]="filter.city.showWithout" name="showWithoutAge" (ngModelChange)="changeUser()">
+		{{'SHOW_WITHOUT_CITY' | translate}}
+	</label>
 	<button type="submit">{{'LOADING' | translate}}</button>
 </form>
 <app-person *ngIf="person" [person]="person"></app-person>
