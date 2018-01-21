@@ -17,3 +17,12 @@
 	display: flex;
 	flex-wrap: wrap-reverse;
 }
+.full-x{
+	width: 100%;
+}
+.absolute{
+	position: absolute;
+}
+.releative{
+	position: relative
+}

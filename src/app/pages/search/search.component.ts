@@ -23,6 +23,12 @@ export class SearchComponent implements OnInit {
 	get posibleFriendsFilterLengthWithoutTrim() {
 		return this.possibleFrinedList.getAll(this.filter, false).length;
 	}
+	get hintFriendList() {
+		if (!this.possibleFrinedList) {return []; }
+		return this.possibleFrinedList.friendList.map(friend => {
+			return {id: friend.id, value: friend.fullName};
+		});
+	}
 	loadPosibleFriend() {
 		delete this.possibleFrinedList;
 		delete this.loadingStage;

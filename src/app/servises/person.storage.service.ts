@@ -1,7 +1,7 @@
 import { Jsonp } from '@angular/http';
 import { Injectable } from '@angular/core';
 import { error } from 'util';
-import { Person, PersonCount, PersonCountList, UserInfo } from './person';
+import { Person, PersonCount, PersonCountList, UserInfo, FriendPerson } from './person';
 import { Subject } from 'rxjs/Subject';
 
 export class LoadingStage {
@@ -42,35 +42,37 @@ export class PersonStorageService {
 	getPossibleFriends(person: Person) {
 		let subject = new Subject<LoadingStage| PersonCountList>();
 		let possibleFriendList = new PersonCountList();
-		this.jsonp.get(person.friendIDsApiURL).toPromise().then(response => {
+		this.jsonp.get(Person.friendApiURL(person.id)).toPromise()
+		.then(response => {
 			if (response.json().error) {
 				subject.error(response.json().error);
 				return;
 			}
-			return response.json().response.items as number[];
+			return response.json().response.items as Array<UserInfo>;
 		})
-		.then( friendIDs => {
-			let loadingStage = new LoadingStage(friendIDs.length);
-			for (let friendID of friendIDs) {
-				this.jsonp.get(Person.friendApiURL(friendID)).toPromise()
+		.then( friendList => {
+			possibleFriendList.friendList = friendList.map(value => new FriendPerson(value.id).copy(value));
+			let loadingStage = new LoadingStage(friendList.length);
+			for (let friend of possibleFriendList.friendList) {
+				this.jsonp.get(Person.friendApiURL(friend.id)).toPromise()
 				.then((response) => {
 					if (response.json().error) {
 						loadingStage.failed++;
 						return;
 					}
 					for (let possibleFriendInfo of response.json().response.items as UserInfo[]) {
-						// let possibleFriendID = response.json().response[0] as number;
 						if (person.id != possibleFriendInfo.id
-								&& !friendIDs.some( personFrineds => personFrineds == possibleFriendInfo.id)) {
+								&& !friendList.some( personFrined => personFrined.id == possibleFriendInfo.id)) {
 							let possibleFriend = possibleFriendList.get(possibleFriendInfo.id);
 							possibleFriend.count++;
+							friend.friendList.push(possibleFriend);
 							possibleFriend.copy(possibleFriendInfo);
 						}
 					}
 					loadingStage.succesfull++;
 					loadingStage.resultCount = possibleFriendList.list.length;
 					subject.next(loadingStage);
-					if (loadingStage.total >= friendIDs.length) {
+					if (loadingStage.total >= friendList.length) {
 						possibleFriendList.sort();
 						subject.next(possibleFriendList);
 						subject.complete();
@@ -78,7 +80,7 @@ export class PersonStorageService {
 				}).catch(() => {
 					loadingStage.failed++;
 					subject.next(loadingStage);
-					if (loadingStage.total >= friendIDs.length) {
+					if (loadingStage.total >= friendList.length) {
 						possibleFriendList.sort();
 						subject.next(possibleFriendList);
 						subject.complete();

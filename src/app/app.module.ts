@@ -11,6 +11,7 @@ import { PersonStorageService } from './servises/person.storage.service';
 import { ConnectionBackend, HttpModule,  Http,  Jsonp,  JsonpModule } from '@angular/http';
 import { PersonComponent } from './pages/search/person/person.component';
 import { SearchListComponent } from './components/search-list/search-list.component';
+import { HintSelectComponent } from './components/hint-select/hint-select.component';
 
 @NgModule({
 	declarations: [
@@ -19,6 +20,7 @@ import { SearchListComponent } from './components/search-list/search-list.compon
 		PersonComponent,
 		RelationPipe,
 		SearchListComponent,
+		HintSelectComponent,
 	],
 	imports: [
 		BrowserModule,

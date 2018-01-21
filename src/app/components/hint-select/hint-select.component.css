@@ -1,0 +1,19 @@
+.hint-contatiner{
+	position: relative;
+}
+.hint-list{
+	position: absolute;
+	background-color: white;
+	max-height: 300px;
+	overflow-y: auto;
+	box-shadow: 1px 1px 0 0 #AAA;
+}
+.hint-item{
+	cursor: pointer;
+}
+.hint-item:hover{
+	background-color: #DDD;
+}
+.select-width{
+	width: 200px;
+}

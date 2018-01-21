@@ -8,6 +8,7 @@ export class PersonFilter {
 	age = {start: null as number, end: null as number, showWithout: false};
 	relation = {value: Relation.NOT_SPECIFIED, showWithout: false};
 	city = {value: new Array<string>(), showWithout: false};
+	friends = new Array<{id: number}>();
 	clone() {
 		let filter = new PersonFilter();
 		filter.start = this.start;
@@ -90,6 +91,7 @@ export class Person {
 		}
 		this.relation = info.relation;
 		if (info.city) {this.city = info.city.title; }
+		return this;
 	}
 }
 
@@ -102,7 +104,12 @@ export class PersonCount extends Person {
 	}
 }
 
+export class FriendPerson extends Person {
+	friendList = new Array<Person>();
+}
+
 export class PersonCountList {
+	public friendList = new Array<FriendPerson>();
 	public list = new Array<PersonCount>();
 	get(id: number) {
 		let person = this.list.find(value => value.id == id);
@@ -148,6 +155,17 @@ export class PersonCountList {
 					} else if (!filter.city.showWithout) {
 						return false;
 					}
+				}
+				if (filter.friends.length) {
+					let isCommonFriend = filter.friends.some( friendID => {
+						let friend = this.friendList.find(value => value.id == friendID.id);
+						if (!friend) {
+							console.warn('Friend not found');
+							return false;
+						}
+						return friend.friendList.some(value => value.id == person.id);
+					});
+					if (!isCommonFriend) {return false; }
 				}
 				return true;
 			});

@@ -1,0 +1,19 @@
+<div>
+	<label>
+		<div>{{title | translate}}</div>
+		<input class="select-width" type="search" placeholder="{{title | translate}}" (blur)="closeHint()" (click)="updateHint()" (ngModelChange)="updateHint($event)" [(ngModel)]="inputText">
+	</label>
+	<div *ngIf="visible" class="hint-container">
+		<div class="hint-list">
+			<div *ngFor="let item of filtredHintList" (click)="add(item)" class="hint-item select-width">
+				{{item.value}}
+			</div>
+		</div>
+	</div>
+</div>
+<div>
+	<div class="between-x wrap item" *ngFor="let item of selectList">
+		<span>{{item.value}}</span>
+		<button type="button" (click)="delete(item)">{{'DELETE' | translate}}</button>
+	</div>
+</div>
