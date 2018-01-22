@@ -1,5 +1,6 @@
 import { Relation } from './relation.model';
 import { Gender } from './gender.model';
+import { PersonFriend } from './person.friend.model';
 
 export class PersonFilter {
 	start: number;
@@ -8,7 +9,7 @@ export class PersonFilter {
 	age = {start: null as number, end: null as number, showWithout: false};
 	relation = {value: Relation.NOT_SPECIFIED, showWithout: false};
 	city = {value: new Array<string>(), showWithout: false};
-	friends = new Array<{id: number}>();
+	friends = {values: new Array<{value: PersonFriend}>(), allSelectedFriends: false};
 	clone() {
 		let filter = new PersonFilter();
 		filter.start = this.start;
@@ -19,6 +20,7 @@ export class PersonFilter {
 		}
 		filter.relation = {value: this.relation.value, showWithout: this.relation.showWithout};
 		filter.city = {value: this.city.value, showWithout: this.city.showWithout};
+		filter.friends = {values: this.friends.values, allSelectedFriends: this.friends.allSelectedFriends};
 		return filter;
 	}
 }

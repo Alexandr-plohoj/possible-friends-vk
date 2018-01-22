@@ -82,7 +82,7 @@ export class PersonStorageService {
 						}
 					}
 					loadingStage.succesfull++;
-					loadingStage.resultCount = possibleFriendDTOList.length;
+					loadingStage.resultCount += possibleFriendDTOList.length;
 				}).catch(() => loadingStage.failed++)
 				.then(() => {
 					subject.next(loadingStage);

@@ -38,11 +38,16 @@
 		{{'SHOW_WITHOUT_RELATION' | translate}}
 	</label>
 	<app-search-list [title]="'CITY'" [searchList]="filter.city.value"></app-search-list>
-	<app-hint-select [title]="'COMMON_FRIENDS'" [hintList]="hintFriendList" [selectList]="filter.friends"></app-hint-select>
 	<label>
 		<input type="checkbox" [(ngModel)]="filter.city.showWithout" name="showWithoutAge" (ngModelChange)="changeUser()">
 		{{'SHOW_WITHOUT_CITY' | translate}}
 	</label>
+	<app-hint-select [title]="'COMMON_FRIENDS'" [hintList]="hintFriendList" [selectList]="filter.friends.values"></app-hint-select>
+	<label>
+		<input type="checkbox" [(ngModel)]="filter.friends.allSelectedFriends" name="showWithoutAge" (ngModelChange)="changeUser()">
+		{{'ALL_SELECTED_FRIENDS' | translate}}
+	</label>
+
 	<button type="submit">{{'LOADING' | translate}}</button>
 </form>
 <app-person *ngIf="person" [person]="person"></app-person>

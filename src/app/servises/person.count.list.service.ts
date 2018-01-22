@@ -44,9 +44,14 @@ export class PersonCountList {
 						return false;
 					}
 				}
-				if (filter.friends.length) {
-					if (!filter.friends.some( friendID =>
-							person.friendList.some(value => value.id == friendID.id ))) {
+				if (filter.friends.values.length) {
+					if (filter.friends.allSelectedFriends) {
+						if (filter.friends.values.some( friend =>
+									!person.friendList.some(value => value.id == friend.value.id ))) {
+								return false;
+							}
+					} else if (!filter.friends.values.some( friend =>
+							person.friendList.some(value => value.id == friend.value.id ))) {
 						return false;
 					}
 				}

@@ -3,6 +3,7 @@ import { PersonStorageService, LoadingStage } from '../../servises/person.storag
 import { Person } from '../../models/person/person.model';
 import { PersonCountList } from '../../servises/person.count.list.service';
 import { PersonFilter } from '../../models/person/person.filter.model';
+import { Relation } from '../../models/person/relation.model';
 
 @Component({
 	selector: 'app-search',
@@ -28,7 +29,7 @@ export class SearchComponent implements OnInit {
 	get hintFriendList() {
 		if (!this.possibleFrinedList) {return []; }
 		return this.possibleFrinedList.friendList.map(friend => {
-			return {id: friend.id, value: friend.fullName};
+			return {value: friend, title: friend.fullName};
 		});
 	}
 	loadPosibleFriend() {
@@ -69,4 +70,11 @@ export class SearchComponent implements OnInit {
 	showMore() {
 		this.filter.length += 10;
 	}
+	get relationwithTitle() {
+		console.log()
+		return Object.keys(Relation).filter(key => typeof Relation[key] == 'number').map(key => {
+			return {value: Relation[key], title: key};
+		});
+	}
+
 }
