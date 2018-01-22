@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { PersonStorageService, LoadingStage } from '../../servises/person.storage.service';
-import { Person, PersonCount, PersonCountList, PersonFilter } from '../../servises/person';
+import { Person } from '../../models/person/person.model';
+import { PersonCountList } from '../../servises/person.count.list.service';
+import { PersonFilter } from '../../models/person/person.filter.model';
 
 @Component({
 	selector: 'app-search',

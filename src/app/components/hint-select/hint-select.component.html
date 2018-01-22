@@ -1,7 +1,7 @@
 <div>
 	<label>
 		<div>{{title | translate}}</div>
-		<input class="select-width" type="search" placeholder="{{title | translate}}" (blur)="closeHint()" (click)="updateHint()" (ngModelChange)="updateHint($event)" [(ngModel)]="inputText">
+		<input class="select-width" type="search" placeholder="{{title | translate}}" (click)="updateHint()" (ngModelChange)="updateHint($event)" [(ngModel)]="inputText">
 	</label>
 	<div *ngIf="visible" class="hint-container">
 		<div class="hint-list">
