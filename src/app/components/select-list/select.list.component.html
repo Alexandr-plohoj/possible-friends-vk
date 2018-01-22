@@ -1,0 +1,12 @@
+<label>
+	<div>{{title | translate}}</div>
+	<select [(ngModel)]="select" (ngModelChange)="add($event)" class="input-with">
+		<option *ngFor="let item of filtredhintList" [ngValue]="item">{{item.title | translate}}</option>
+	</select>
+</label>
+<div>
+	<div class="between-x wrap item" *ngFor="let item of selectList">
+		<span>{{item.title | translate}}</span>
+		<button type="button" (click)="delete(item)">{{'DELETE' | translate}}</button>
+	</div>
+</div>

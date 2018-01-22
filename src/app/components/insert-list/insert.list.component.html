@@ -1,6 +1,6 @@
 <label>
 	<div>{{title | translate}}</div>
-	<input type="text" placeholder="{{title | translate}}" [(ngModel)]="inputText" name="searchInput">
+	<input class="input-with" type="text" placeholder="{{title | translate}}" [(ngModel)]="inputText" (keydown.enter)="add()">
 </label>
 <button type="button" (click)="add()">{{'ADD' | translate}}</button>
 <div>

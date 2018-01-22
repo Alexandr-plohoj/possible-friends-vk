@@ -72,9 +72,12 @@ export class SearchComponent implements OnInit {
 	}
 	get relationwithTitle() {
 		console.log()
-		return Object.keys(Relation).filter(key => typeof Relation[key] == 'number').map(key => {
-			return {value: Relation[key], title: key};
-		});
+		return Object.keys(Relation)
+			.filter(key => typeof Relation[key] == 'number' && key != 'NOT_SPECIFIED')
+			.map(key => {
+				return {value: Relation[key], title: key};
+			}
+		);
 	}
 
 }

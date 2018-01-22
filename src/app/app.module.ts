@@ -12,6 +12,7 @@ import { ConnectionBackend, HttpModule,  Http,  Jsonp,  JsonpModule } from '@ang
 import { PersonComponent } from './components/person/person.component';
 import { PickListComponent } from './components/pick-list/pick.list.component';
 import { InsertListComponent } from './components/insert-list/insert.list.component';
+import { SelectListComponent } from './components/select-list/select.list.component';
 
 @NgModule({
 	declarations: [
@@ -21,6 +22,7 @@ import { InsertListComponent } from './components/insert-list/insert.list.compon
 		RelationPipe,
 		PickListComponent,
 		InsertListComponent,
+		SelectListComponent,
 	],
 	imports: [
 		BrowserModule,

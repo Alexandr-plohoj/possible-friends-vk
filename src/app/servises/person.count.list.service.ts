@@ -30,9 +30,11 @@ export class PersonCountList {
 						if (filter.age.end && filter.age.end < age) {return false; }
 					} else if (!filter.age.showWithout) {return false; }
 				}
-				if (filter.relation.value) {
+				if (filter.relation.values.length) {
 					if (person.relation) {
-						if (filter.relation.value != person.relation) {return false; }
+						if (!filter.relation.values.some(relation => relation.value == person.relation)) {
+							return false;
+						}
 					} else if (!filter.relation.showWithout) {return false; }
 				}
 				if (filter.city.value.length) {

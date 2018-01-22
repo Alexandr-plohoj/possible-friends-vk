@@ -7,7 +7,7 @@ export class PersonFilter {
 	length: number;
 	sex = Gender.ANY;
 	age = {start: null as number, end: null as number, showWithout: false};
-	relation = {value: Relation.NOT_SPECIFIED, showWithout: false};
+	relation = {values: new Array<{value: Relation}>(), showWithout: false};
 	city = {value: new Array<string>(), showWithout: false};
 	friends = {values: new Array<{value: PersonFriend}>(), allSelectedFriends: false};
 	clone() {
@@ -18,9 +18,9 @@ export class PersonFilter {
 		if (filter.age) {
 			filter.age = {start: this.age.start, end: this.age.end, showWithout: this.age.showWithout};
 		}
-		filter.relation = {value: this.relation.value, showWithout: this.relation.showWithout};
+		filter.relation = {values: this.relation.value.slice(), showWithout: this.relation.showWithout};
 		filter.city = {value: this.city.value, showWithout: this.city.showWithout};
-		filter.friends = {values: this.friends.values, allSelectedFriends: this.friends.allSelectedFriends};
+		filter.friends = {values: this.friends.values.slice(), allSelectedFriends: this.friends.allSelectedFriends};
 		return filter;
 	}
 }

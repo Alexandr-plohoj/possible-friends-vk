@@ -26,3 +26,12 @@
 .releative{
 	position: relative
 }
+.input-with{
+	width: 170px;
+}
+.group{
+	border: 1px solid #999;
+	display: block;
+	border-radius: 10px;
+	padding: 5px;
+}

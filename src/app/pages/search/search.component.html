@@ -1,55 +1,54 @@
-<form id="navigation" (ngSubmit)="loadPosibleFriend()">
-	<label>{{'USER_IDS' | translate}}
-		<input type="number" placeholder="{{'USER_IDS' | translate}}" [(ngModel)]="userID" name="userID" (ngModelChange)="changeUser()">
-	</label>
+<div id="navigation">
+	<div class="group">
+		<label>{{'USER_IDS' | translate}}
+			<input type="number" placeholder="{{'USER_IDS' | translate}}" [(ngModel)]="userID" name="userID" (ngModelChange)="changeUser()" (keydown.enter)="loadPosibleFriend()">
+		</label>
+	</div>
 	<h2>{{'FILTERS' | translate}}</h2>
-	<label>{{'SEX' | translate}}
-		<select [(ngModel)]="filter.sex" name="sex" (ngModelChange)="changeFilter()">
-			<option [ngValue]="0">{{'ANY' | translate}}</option>
-			<option [ngValue]="1">{{'WOMAN' | translate}}</option>
-			<option [ngValue]="2">{{'MAN' | translate}}</option>
-		</select>
-	</label>
-	<label >{{'AGE_BEGIN' | translate}}
-		<input type="number" placeholder="{{'AGE_BEGIN' | translate}}" [(ngModel)]="filter.age.start" name="ageBegin" (ngModelChange)="changeUser()">
-	</label>
-	<label>{{'AGE_END' | translate}}
-		<input type="number" placeholder="{{'AGE_END' | translate}}" [(ngModel)]="filter.age.end" name="ageEnd" (ngModelChange)="changeUser()">
-	</label>
-	<label>
-		<input type="checkbox" [(ngModel)]="filter.age.showWithout" name="showWithoutAge" (ngModelChange)="changeUser()">
-		{{'SHOW_WITHOUT_AGE' | translate}}
-	</label>
-	<label>{{'RELATION' | translate}}
-		<select [(ngModel)]="filter.relation.value" name="relation" (ngModelChange)="changeFilter()">
-			<option [ngValue]="0">{{'NOT_SPECIFIED' | translate}}</option>
-			<option [ngValue]="1">{{'SINGLE' | translate}}</option>
-			<option [ngValue]="2">{{'IN_RELATIONSHIP' | translate}}</option>
-			<option [ngValue]="3">{{'ENGAGED' | translate}}</option>
-			<option [ngValue]="4">{{'MARRIED' | translate}}</option>
-			<option [ngValue]="5">{{'COMPLICATED' | translate}}</option>
-			<option [ngValue]="6">{{'SEARCHING' | translate}}</option>
-			<option [ngValue]="7">{{'LOVE' | translate}}</option>
-			<option [ngValue]="8">{{'CIVIL_UNION' | translate}}</option>
-		</select>
-	</label>
-	<label>
-		<input type="checkbox" [(ngModel)]="filter.relation.showWithout" name="showWithoutRelation" (ngModelChange)="changeUser()">
-		{{'SHOW_WITHOUT_RELATION' | translate}}
-	</label>
-	<app-insert-list [title]="'CITY'" [searchList]="filter.city.value"></app-insert-list>
-	<label>
-		<input type="checkbox" [(ngModel)]="filter.city.showWithout" name="showWithoutAge" (ngModelChange)="changeUser()">
-		{{'SHOW_WITHOUT_CITY' | translate}}
-	</label>
-	<app-pick-list [title]="'COMMON_FRIENDS'" [hintList]="hintFriendList" [selectList]="filter.friends.values"></app-pick-list>
-	<label>
-		<input type="checkbox" [(ngModel)]="filter.friends.allSelectedFriends" name="showWithoutAge" (ngModelChange)="changeUser()">
-		{{'ALL_SELECTED_FRIENDS' | translate}}
-	</label>
-
-	<button type="submit">{{'LOADING' | translate}}</button>
-</form>
+	<div class="group">
+		<label>{{'SEX' | translate}}
+			<select [(ngModel)]="filter.sex" name="sex" (ngModelChange)="changeFilter()">
+				<option [ngValue]="0">{{'ANY' | translate}}</option>
+				<option [ngValue]="1">{{'WOMAN' | translate}}</option>
+				<option [ngValue]="2">{{'MAN' | translate}}</option>
+			</select>
+		</label>
+	</div>
+	<div class="group">
+		<label >{{'AGE_BEGIN' | translate}}
+			<input type="number" placeholder="{{'AGE_BEGIN' | translate}}" [(ngModel)]="filter.age.start" name="ageBegin" (ngModelChange)="changeUser()">
+		</label>
+		<label>{{'AGE_END' | translate}}
+			<input type="number" placeholder="{{'AGE_END' | translate}}" [(ngModel)]="filter.age.end" name="ageEnd" (ngModelChange)="changeUser()">
+		</label>
+		<label>
+			<input type="checkbox" [(ngModel)]="filter.age.showWithout" name="showWithoutAge" (ngModelChange)="changeUser()">
+			{{'SHOW_WITHOUT_AGE' | translate}}
+		</label>
+	</div>
+	<div class="group">
+		<app-select-list [title]="'RELATION'" [hintList]="relationwithTitle" [selectList]="filter.relation.values"  ></app-select-list>
+		<label>
+			<input type="checkbox" [(ngModel)]="filter.relation.showWithout" name="showWithoutRelation" (ngModelChange)="changeUser()">
+			{{'SHOW_WITHOUT_RELATION' | translate}}
+		</label>
+	</div>
+	<div class="group">
+		<app-insert-list [title]="'CITY'" [searchList]="filter.city.value"></app-insert-list>
+		<label>
+			<input type="checkbox" [(ngModel)]="filter.city.showWithout" name="showWithoutAge" (ngModelChange)="changeUser()">
+			{{'SHOW_WITHOUT_CITY' | translate}}
+		</label>
+	</div>
+	<div class="group">
+		<app-pick-list [title]="'COMMON_FRIENDS'" [hintList]="hintFriendList" [selectList]="filter.friends.values"></app-pick-list>
+		<label>
+			<input type="checkbox" [(ngModel)]="filter.friends.allSelectedFriends" name="showWithoutAge" (ngModelChange)="changeUser()">
+			{{'ALL_SELECTED_FRIENDS' | translate}}
+		</label>
+	</div>
+	<button  (click)="loadPosibleFriend()">{{'LOADING' | translate}}</button>
+</div>
 <app-person *ngIf="person" [person]="person"></app-person>
 <ng-container *ngIf="person">
 	<ng-container *ngIf="loadingStage">
