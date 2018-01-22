@@ -4,6 +4,11 @@
 <div class="info">
 	<h5><a *ngIf="person.firstName" [href]="'https://vk.com/id'+ person.id">{{person.fullName}}</a></h5>
 	<p *ngIf="person.count">{{'SHARED_FRIENDS' | translate}}: {{person.count}}</p>
+	<div *ngIf="person.friendList" class="friend-list">
+		<a [href]="'https://vk.com/id'+ item.id" *ngFor="let item of person.friendList | slice:0:6">
+			<img *ngIf="item.photo" [src]="item.photo['100']" [title]="item.fullName" class="friend photo">
+		</a>
+	</div>
 	<p *ngIf="person.bdate && person.bdate.day && person.bdate.month" >
 			{{'BIRTHDAY' | translate}}: {{person.bdate.day}}.{{person.bdate.month}}<span *ngIf="person.bdate.year">.{{person.bdate.year}}
 				({{person.age}})

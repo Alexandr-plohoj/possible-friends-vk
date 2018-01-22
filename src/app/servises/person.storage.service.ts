@@ -67,7 +67,7 @@ export class PersonStorageService {
 						loadingStage.failed++;
 						return;
 					}
-					let possibleFriendDTOList = response.json().response.items as UserDTO[]
+					let possibleFriendDTOList = response.json().response.items as UserDTO[];
 					for (let possibleFriendDTO of possibleFriendDTOList) {
 						if (person.id != possibleFriendDTO.id
 								&& !friendList.has(possibleFriendDTO.id)) {
@@ -76,15 +76,15 @@ export class PersonStorageService {
 								possibleFriend = new PersonCount(possibleFriendDTO.id).copy(possibleFriendDTO);
 								possibleFriendList.set(possibleFriend.id, possibleFriend);
 							}
+							possibleFriend.friendList.push(friend);
 							possibleFriend.count++;
 							friend.friendList.push(possibleFriend);
 						}
 					}
 					loadingStage.succesfull++;
 					loadingStage.resultCount = possibleFriendDTOList.length;
-				}).catch(() => {
-					loadingStage.failed++;
-				}).then(() => {
+				}).catch(() => loadingStage.failed++)
+				.then(() => {
 					subject.next(loadingStage);
 					if (loadingStage.total >= friendDTOList.length) {
 						let personCountList = new PersonCountList(

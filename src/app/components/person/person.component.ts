@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PersonCount } from '../../../models/person/person.count.model';
+import { PersonCount } from '../../models/person/person.count.model';
 
 @Component({
 	selector: 'app-person',

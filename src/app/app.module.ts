@@ -9,9 +9,9 @@ import { AppComponent } from './app.component';
 import { SearchComponent } from './pages/search/search.component';
 import { PersonStorageService } from './servises/person.storage.service';
 import { ConnectionBackend, HttpModule,  Http,  Jsonp,  JsonpModule } from '@angular/http';
-import { PersonComponent } from './pages/search/person/person.component';
 import { SearchListComponent } from './components/search-list/search-list.component';
 import { HintSelectComponent } from './components/hint-select/hint-select.component';
+import { PersonComponent } from './components/person/person.component';
 
 @NgModule({
 	declarations: [

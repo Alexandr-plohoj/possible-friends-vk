@@ -1,6 +1,6 @@
-import { Person } from './person.model';
+import { PersonFriend } from './person.friend.model';
 
-export class PersonCount extends Person {
+export class PersonCount extends PersonFriend {
 	constructor(
 		public id: number,
 		public count = 0,

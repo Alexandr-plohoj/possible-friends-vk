@@ -45,15 +45,10 @@ export class PersonCountList {
 					}
 				}
 				if (filter.friends.length) {
-					let isCommonFriend = filter.friends.some( friendID => {
-						let friend = this.friendList.find(value => value.id == friendID.id);
-						if (!friend) {
-							console.warn('Friend not found');
-							return false;
-						}
-						return friend.friendList.some(value => value.id == person.id);
-					});
-					if (!isCommonFriend) {return false; }
+					if (!filter.friends.some( friendID =>
+							person.friendList.some(value => value.id == friendID.id ))) {
+						return false;
+					}
 				}
 				return true;
 			});
