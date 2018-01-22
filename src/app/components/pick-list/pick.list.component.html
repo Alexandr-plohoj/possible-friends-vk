@@ -6,14 +6,14 @@
 	<div *ngIf="visible" class="hint-container">
 		<div class="hint-list">
 			<div *ngFor="let item of filtredHintList" (click)="add(item)" class="hint-item select-width">
-				{{item.value}}
+				{{item.title}}
 			</div>
 		</div>
 	</div>
 </div>
 <div>
 	<div class="between-x wrap item" *ngFor="let item of selectList">
-		<span>{{item.value}}</span>
+		<span>{{item.title}}</span>
 		<button type="button" (click)="delete(item)">{{'DELETE' | translate}}</button>
 	</div>
 </div>

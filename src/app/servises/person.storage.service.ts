@@ -67,8 +67,7 @@ export class PersonStorageService {
 						loadingStage.failed++;
 						return;
 					}
-					let possibleFriendDTOList = response.json().response.items as UserDTO[];
-					for (let possibleFriendDTO of possibleFriendDTOList) {
+					for (let possibleFriendDTO of response.json().response.items as UserDTO[]) {
 						if (person.id != possibleFriendDTO.id
 								&& !friendList.has(possibleFriendDTO.id)) {
 							let possibleFriend = possibleFriendList.get(possibleFriendDTO.id);
@@ -82,7 +81,7 @@ export class PersonStorageService {
 						}
 					}
 					loadingStage.succesfull++;
-					loadingStage.resultCount += possibleFriendDTOList.length;
+					loadingStage.resultCount = possibleFriendList.size;
 				}).catch(() => loadingStage.failed++)
 				.then(() => {
 					subject.next(loadingStage);
