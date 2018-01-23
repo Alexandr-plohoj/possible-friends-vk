@@ -29,5 +29,13 @@
 	"FILTER_TARGET_LENGTH": "Possible friends target filter length",
 	"SHOW_MORE": "Show more",
 	"SHARED_FRIENDS": "Shared friends",
-	"BIRTHDAY": "Birthday"
+	"BIRTHDAY": "Birthday",
+
+	"CITY": "City",
+	"COMMON_FRIENDS": "Common friends",
+	"SHOW_WITHOUT_CITY": "Show without city",
+	"ALL_SELECTED_FRIENDS": "All selected common friends",
+
+	"ADD": "√",
+	"DELETE": "×"
 }

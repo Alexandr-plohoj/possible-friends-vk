@@ -18,7 +18,7 @@ export class PersonFilter {
 		if (filter.age) {
 			filter.age = {start: this.age.start, end: this.age.end, showWithout: this.age.showWithout};
 		}
-		filter.relation = {values: this.relation.value.slice(), showWithout: this.relation.showWithout};
+		filter.relation = {values: this.relation.values.slice(), showWithout: this.relation.showWithout};
 		filter.city = {value: this.city.value, showWithout: this.city.showWithout};
 		filter.friends = {values: this.friends.values.slice(), allSelectedFriends: this.friends.allSelectedFriends};
 		return filter;

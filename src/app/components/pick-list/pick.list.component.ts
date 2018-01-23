@@ -20,7 +20,6 @@ export class PickListComponent implements OnInit {
 	constructor(private eRef: ElementRef) {}
 	ngOnInit() {}
 	add(item: Hint) {
-		console.log('add');
 		this.visible = false;
 		if (this.selectList.some(value => value == item)) {
 			return;

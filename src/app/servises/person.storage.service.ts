@@ -6,6 +6,7 @@ import { PersonCountList } from './person.count.list.service';
 import { PersonFriend } from '../models/person/person.friend.model';
 import { PersonCount } from '../models/person/person.count.model';
 import { UserDTO } from '../models/person/user.dto.model';
+import { Observable } from 'rxjs/Observable';
 
 export class LoadingStage {
 	succesfull = 0;
@@ -43,61 +44,61 @@ export class PersonStorageService {
 		});
 	}
 	getPossibleFriends(person: Person) {
-		let clock = Date.now();
-		let subject = new Subject<LoadingStage| PersonCountList>();
-		let friendList = new Map<number, PersonFriend>();
-		let possibleFriendList = new Map<number, PersonCount>();
-		this.jsonp.get(Person.friendApiURL(person.id)).toPromise()
-		.then(response => {
-			if (response.json().error) {
-				subject.error(response.json().error);
-				return;
-			}
-			return response.json().response.items as Array<UserDTO>;
-		})
-		.then( friendDTOList => {
-			friendDTOList.forEach(friendDTO => {
-				friendList.set(friendDTO.id, new PersonFriend(friendDTO.id).copy(friendDTO));
-			});
-			let loadingStage = new LoadingStage(friendDTOList.length);
-			friendList.forEach(friend => {
-				this.jsonp.get(Person.friendApiURL(friend.id)).toPromise()
-				.then((response) => {
-					if (response.json().error) {
-						loadingStage.failed++;
-						return;
-					}
-					for (let possibleFriendDTO of response.json().response.items as UserDTO[]) {
-						if (person.id != possibleFriendDTO.id
-								&& !friendList.has(possibleFriendDTO.id)) {
-							let possibleFriend = possibleFriendList.get(possibleFriendDTO.id);
-							if (!possibleFriend) {
-								possibleFriend = new PersonCount(possibleFriendDTO.id).copy(possibleFriendDTO);
-								possibleFriendList.set(possibleFriend.id, possibleFriend);
-							}
-							possibleFriend.friendList.push(friend);
-							possibleFriend.count++;
-							friend.friendList.push(possibleFriend);
+		return new Observable<LoadingStage| PersonCountList>(observer => {
+			let clock = Date.now();
+			let friendList = new Map<number, PersonFriend>();
+			let possibleFriendList = new Map<number, PersonCount>();
+			this.jsonp.get(Person.friendApiURL(person.id)).toPromise()
+			.then(response => {
+				if (response.json().error) {
+					observer.error(response.json().error);
+					return;
+				}
+				return response.json().response.items as Array<UserDTO>;
+			})
+			.then( friendDTOList => {
+				friendDTOList.forEach(friendDTO => {
+					friendList.set(friendDTO.id, new PersonFriend(friendDTO.id).copy(friendDTO));
+				});
+				let loadingStage = new LoadingStage(friendDTOList.length);
+				friendList.forEach(friend => {
+					this.jsonp.get(Person.friendApiURL(friend.id)).toPromise()
+					.then((response) => {
+						if (response.json().error) {
+							loadingStage.failed++;
+							return;
 						}
-					}
-					loadingStage.succesfull++;
-					loadingStage.resultCount = possibleFriendList.size;
-				}).catch(() => loadingStage.failed++)
-				.then(() => {
-					subject.next(loadingStage);
-					if (loadingStage.total >= friendDTOList.length) {
-						let personCountList = new PersonCountList(
-							Array.from(friendList.values()),
-							Array.from(possibleFriendList.values()),
-						);
-						personCountList.sortPossibleFriendlist();
-						subject.next(personCountList);
-						subject.complete();
-						console.log('time:', Date.now() - clock);
-					}
+						for (let possibleFriendDTO of response.json().response.items as UserDTO[]) {
+							if (person.id != possibleFriendDTO.id
+									&& !friendList.has(possibleFriendDTO.id)) {
+								let possibleFriend = possibleFriendList.get(possibleFriendDTO.id);
+								if (!possibleFriend) {
+									possibleFriend = new PersonCount(possibleFriendDTO.id).copy(possibleFriendDTO);
+									possibleFriendList.set(possibleFriend.id, possibleFriend);
+								}
+								possibleFriend.friendList.push(friend);
+								possibleFriend.count++;
+								friend.friendList.push(possibleFriend);
+							}
+						}
+						loadingStage.succesfull++;
+						loadingStage.resultCount = possibleFriendList.size;
+					}).catch(() => loadingStage.failed++)
+					.then(() => {
+						observer.next(loadingStage);
+						if (loadingStage.total >= friendDTOList.length) {
+							let personCountList = new PersonCountList(
+								Array.from(friendList.values()),
+								Array.from(possibleFriendList.values()),
+							);
+							personCountList.sortPossibleFriendlist();
+							observer.next(personCountList);
+							observer.complete();
+							console.log('time:', Date.now() - clock);
+						}
+					});
 				});
 			});
 		});
-		return subject;
 	}
 }
