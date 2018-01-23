@@ -1,6 +1,7 @@
 import { Relation } from './relation.model';
 import { Gender } from './gender.model';
 import { PersonFriend } from './person.friend.model';
+import { PersonCount } from './person.count.model';
 
 export class PersonFilter {
 	start: number;
@@ -10,6 +11,7 @@ export class PersonFilter {
 	relation = {values: new Array<{value: Relation}>(), showWithout: false};
 	city = {value: new Array<string>(), showWithout: false};
 	friends = {values: new Array<{value: PersonFriend}>(), allSelectedFriends: false};
+	hide = new Array<PersonCount>();
 	clone() {
 		let filter = new PersonFilter();
 		filter.start = this.start;

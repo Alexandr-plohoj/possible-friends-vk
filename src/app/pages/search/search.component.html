@@ -47,6 +47,7 @@
 			{{'ALL_SELECTED_FRIENDS' | translate}}
 		</label>
 	</div>
+	<button  (click)="hideScanned()">{{'HIDE_SCANNED' | translate}}</button>
 	<button  (click)="loadPosibleFriend()">{{'LOADING' | translate}}</button>
 </div>
 <app-person *ngIf="person" [person]="person"></app-person>

@@ -79,5 +79,8 @@ export class SearchComponent implements OnInit {
 			}
 		);
 	}
-
+	hideScanned() {
+		this.possibleFrinedFiltredList.forEach(value => this.filter.hide.push(value));
+		this.filter.length = 10;
+	}
 }

@@ -7,7 +7,7 @@ label{
 	min-width: 300px;
 }
 #navigation{
-	position: fixed;
+	position: absolute;
 	right: 0;
 	width: 300px;
 	min-width: 300px;
